@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 namespace SignalRGame.Controllers
 {
-    [Authorize]
+
     [ApiController]
     [Route("api/[controller]")]
     public class DashboardController : ControllerBase
@@ -23,7 +23,7 @@ namespace SignalRGame.Controllers
         {
             _context = context;
         }
-
+            [Authorize]
         [HttpGet("watchers")]
         public async Task<IActionResult> GetWatchers(
             int page = 1,
@@ -33,29 +33,24 @@ namespace SignalRGame.Controllers
         {
             IQueryable<Watcher> query = _context.Watchers;
 
-            // Filter
+            // Filter by username prefix
             if (!string.IsNullOrEmpty(prefix))
             {
                 query = query.Where(w => w.Username.StartsWith(prefix));
             }
 
-            // Sort
+            // Custom sorting by interaction match first
             if (!string.IsNullOrEmpty(sortBy))
             {
-                switch (sortBy.ToLower())
-                {
-                    case "interaction":
-                        query = query.OrderBy(w => w.interaction);
-                        break;
-                    case "username":
-                        query = query.OrderBy(w => w.Username);
-                        break;
-                    case "platform":
-                        query = query.OrderBy(w => w.platform);
-                        break;
-                    default:
-                        return BadRequest("Unsupported sort field.");
-                }
+                query = query
+                    .OrderByDescending(w => w.interaction.ToLower() == sortBy.ToLower()) // Matches go to top
+                    .ThenBy(w => w.interaction) // Group the rest alphabetically by interaction
+                    .ThenBy(w => w.Username);   // Optional: sort by name within group
+            }
+            else
+            {
+                // Default sort by Username
+                query = query.OrderBy(w => w.Username);
             }
 
             // Pagination
@@ -76,14 +71,23 @@ namespace SignalRGame.Controllers
         }
 
 
-        // 2. Delete all watchers
-        [HttpDelete("watchers")]
-        public async Task<IActionResult> DeleteAllWatchers()
+        [Authorize]
+        [HttpDelete("watchers/{id}")]
+        public async Task<IActionResult> DeleteWatcher(int id)
         {
-            _context.Watchers.RemoveRange(_context.Watchers);
+            var watcher = await _context.Watchers.FindAsync(id);
+
+            if (watcher == null)
+            {
+                return NotFound($"Watcher with ID {id} not found.");
+            }
+
+            _context.Watchers.Remove(watcher);
             await _context.SaveChangesAsync();
+
             return NoContent();
         }
+
 
 
         // 5. Get all watchers in plain text format
@@ -93,7 +97,7 @@ namespace SignalRGame.Controllers
             var watchers = await _context.Watchers.ToListAsync();
 
             var lines = watchers.Select(w =>
-                $"ID: {w.Id}, Username: {w.Username}, Interaction: {w.interaction}, Platform: {w.platform}");
+                $"{w.Username}");
 
             var result = string.Join("\n", lines);
 

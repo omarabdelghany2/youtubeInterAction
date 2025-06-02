@@ -53,11 +53,22 @@ namespace SignalRGame.Hubs
             }
 
             await _context.SaveChangesAsync();
-            await _hubContext.Clients.All.SendAsync("StreamlabsTokenUpdated");
-            // 🔄 Automatically start listener for the same client
+
+            var token = _context.StreamlabsTokens.FirstOrDefault()?.Token;
+
+            // Use Clients.Caller instead of _hubContext.Clients.Caller
+            await Clients.Caller.SendAsync("StreamlabsTokenUpdated", new
+            {
+                message = new
+                {
+                    videoId = _videoId,
+                    token = token
+                }
+            });
+
+            // Automatically start listener for the same client
             await MakeListener();
         }
-
 
         [Authorize]
         public async Task MakeListener()
@@ -91,7 +102,19 @@ namespace SignalRGame.Hubs
             Console.WriteLine("Starting new listener");
             _listeningTask = Task.Run(() => _listenerService.StartListening(_videoId, Clients, _cts.Token));
             Console.WriteLine("Listener task assigned");
+
+            var token = _context.StreamlabsTokens.FirstOrDefault()?.Token;
+
+            await Clients.Caller.SendAsync("StreamlabsTokenUpdated", new
+            {
+                message = new
+                {
+                    videoId = _videoId,
+                    token = token
+                }
+            });
         }
+
 
 
 
