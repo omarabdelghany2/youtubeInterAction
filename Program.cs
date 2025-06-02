@@ -28,16 +28,20 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
-builder.Services.AddSingleton<YouTubeChatListenerService>(sp =>
+builder.Services.AddScoped<YouTubeChatListenerService>(sp =>
 {
     var hubContext = sp.GetRequiredService<IHubContext<YouTubeChatHub>>();
+    var dbContext = sp.GetRequiredService<ApplicationDbContext>();
+    var scopeFactory = sp.GetRequiredService<IServiceScopeFactory>();  // <-- this is critical
     var youtubeApiKey = builder.Configuration["YouTubeApiKey"];
     if (string.IsNullOrEmpty(youtubeApiKey))
     {
         throw new Exception("YouTube API key is not configured.");
     }
-    return new YouTubeChatListenerService(hubContext, youtubeApiKey);
+    return new YouTubeChatListenerService(hubContext, youtubeApiKey, dbContext, scopeFactory);
 });
+
+
 
 builder.Services.AddAuthentication(options =>
 {
@@ -78,15 +82,16 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigins", policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
-        policy.WithOrigins("http://127.0.0.1:5500")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials()
-              .SetIsOriginAllowed(origin => true);  // temporarily allow all origins for testing
+        policy
+            .SetIsOriginAllowed(_ => true) // Allow any origin
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials(); // Required for SignalR if using cookies or auth
     });
 });
+
 
 
 builder.Services.AddAuthorization();
@@ -100,7 +105,8 @@ builder.Services.AddSignalR();
 
 var app = builder.Build();
 
-app.UseCors("AllowSpecificOrigins");
+app.UseCors("AllowAll");
+
 app.UseStaticFiles();
 
 app.UseAuthentication();

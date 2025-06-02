@@ -14,7 +14,10 @@ namespace SignalRGame.Data
         }
 
         public DbSet<MyUser> Users { get; set; }
-        public DbSet<watcher> Watchers { get; set; }
+        public DbSet<Watcher> Watchers { get; set; }
+
+        public DbSet<StreamlabsToken> StreamlabsTokens { get; set; }
+
 
     }
 }

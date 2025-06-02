@@ -1,9 +1,10 @@
-namespace SignalRGame.Models;
-
-public class watcher
+namespace SignalRGame.Models
 {
-    public int Id { get; set; }
-    public string Username { get; set; }
-    public string interaction{get ; set; }= "";
-    public string platform {get;set;}= "";
+    public class Watcher
+    {
+        public int Id { get; set; }
+        public string Username { get; set; }
+        public string interaction { get; set; } = "";
+        public string platform { get; set; } = "";
+    }
 }

@@ -94,6 +94,10 @@
             "System.Text.Json": {
               "target": "Package",
               "version": "[8.0.5, )"
+            },
+            "Websocket.Client": {
+              "target": "Package",
+              "version": "[5.2.0, )"
             }
           },
           "imports": [

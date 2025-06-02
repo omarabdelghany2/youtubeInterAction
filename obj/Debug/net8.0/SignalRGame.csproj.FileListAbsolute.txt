@@ -336,3 +336,6 @@ C:/Users/omarz/Documents/SignalDotnNet/WebSocketDotNet/WebSocketDotNet/SignalRGa
 /home/WebSocketDotNet/SignalRGame/bin/Debug/net8.0/Microsoft.Extensions.Identity.Core.dll
 /home/WebSocketDotNet/SignalRGame/bin/Debug/net8.0/Microsoft.Extensions.Identity.Stores.dll
 /home/WebSocketDotNet/SignalRGame/bin/Debug/net8.0/BCrypt.Net-Next.dll
+/home/WebSocketDotNet/SignalRGame/bin/Debug/net8.0/Microsoft.IO.RecyclableMemoryStream.dll
+/home/WebSocketDotNet/SignalRGame/bin/Debug/net8.0/System.Reactive.dll
+/home/WebSocketDotNet/SignalRGame/bin/Debug/net8.0/Websocket.Client.dll
