@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/WebSocketDotNet/SignalRGame/SignalRGame.csproj": {}
+    "/home/kali/Backend/youtubeInterAction/SignalRGame.csproj": {}
   },
   "projects": {
-    "/home/WebSocketDotNet/SignalRGame/SignalRGame.csproj": {
+    "/home/kali/Backend/youtubeInterAction/SignalRGame.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/WebSocketDotNet/SignalRGame/SignalRGame.csproj",
+        "projectUniqueName": "/home/kali/Backend/youtubeInterAction/SignalRGame.csproj",
         "projectName": "SignalRGame",
-        "projectPath": "/home/WebSocketDotNet/SignalRGame/SignalRGame.csproj",
-        "packagesPath": "/home/megashieldeg/.nuget/packages/",
-        "outputPath": "/home/WebSocketDotNet/SignalRGame/obj/",
+        "projectPath": "/home/kali/Backend/youtubeInterAction/SignalRGame.csproj",
+        "packagesPath": "/home/kali/.nuget/packages/",
+        "outputPath": "/home/kali/Backend/youtubeInterAction/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/megashieldeg/.nuget/NuGet/NuGet.Config"
+          "/home/kali/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -119,7 +119,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.403/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.410/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

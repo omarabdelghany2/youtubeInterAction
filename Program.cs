@@ -85,10 +85,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll", policy =>
     {
         policy
-            .SetIsOriginAllowed(_ => true) // Allow any origin
+            .AllowAnyOrigin()
             .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials(); // Required for SignalR if using cookies or auth
+            .AllowAnyMethod(); // Required for SignalR if using cookies or auth
     });
 });
 
@@ -104,6 +103,7 @@ builder.Services.AddSignalR();
 // ... other services like YouTubeChatListenerService, HttpClient, CORS, etc.
 
 var app = builder.Build();
+app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
 
@@ -121,6 +121,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+
 
 app.Run();
